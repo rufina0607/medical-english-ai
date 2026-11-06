@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173b59">
+<title>Medical English Made Easy — интерактивный модуль</title>
+<style>
+:root{--navy:#173b59;--blue:#27658a;--pale:#eef5f9;--ink:#203040;--muted:#617181;--line:#d9e3ea;--green:#e8f5ed}
+*{box-sizing:border-box}body{margin:0;background:#f4f7fa;color:var(--ink);font:16px/1.5 Arial,sans-serif}
+header{background:linear-gradient(130deg,#173b59,#27658a);color:white;padding:25px 18px 22px}
+.wrap{max-width:900px;margin:auto}h1{font-size:25px;line-height:1.2;margin:0 0 8px}header p{margin:0;color:#e2edf4}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 0}
+nav button,.btn{border:0;border-radius:10px;padding:10px 14px;background:#e5edf3;color:var(--navy);font-weight:700;cursor:pointer}
+nav button.active,.btn.primary{background:var(--navy);color:white}
+main{padding:0 14px 30px}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:18px;margin:10px 0;box-shadow:0 3px 12px #173b590c}
+h2{font-size:21px;color:var(--navy);margin:0 0 10px}h3{font-size:17px;color:var(--blue);margin:18px 0 8px}
+.note{background:var(--pale);border-left:4px solid var(--blue);padding:12px;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--navy);background:#f4f8fb}
+.word{font-weight:700;color:#173b59}.ipa{color:#50677a}.small{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.audio{border:1px solid var(--line);background:white;border-radius:8px;padding:6px 9px;cursor:pointer}
+.dialogue p{padding:10px 12px;margin:7px 0;background:#f5f8fa;border-radius:9px}
+.dialogue b{color:var(--blue)}.translation{color:var(--muted)}
+.question{padding:12px 0;border-bottom:1px solid var(--line)}label{display:block;margin:7px 0}
+input[type=radio]{margin-right:7px}.result{padding:12px;border-radius:9px;margin-top:12px;background:var(--green);display:none}
+.tab{display:none}.tab.show{display:block}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:12px}
+@media(max-width:600px){h1{font-size:22px}table{font-size:13px}th,td{padding:8px 5px}.card{padding:14px}}
+
+.chaptergrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px}
+#speaking select{font:inherit;background:white;color:#222}
+#speaking .row{display:flex;flex-wrap:wrap;gap:8px}
+#speaking .btn{margin:4px 0}
+#speaking ol{line-height:1.8}
+
+
+.progressbar{height:16px;background:#e6edf2;border-radius:20px;overflow:hidden;margin:14px 0}
+#progressFill{height:100%;width:0;background:#2d7d65;transition:width .25s}
+.badge{display:inline-block;background:#e5f4ed;color:#205d47;border-radius:8px;padding:7px 10px;margin:4px;font-size:.9rem}
+
+
+.patient-choices{display:grid;gap:9px;margin:12px 0}
+.patient-choices button{width:100%;text-align:left;background:#f4f8fb;border:1px solid #d9e3ea;border-radius:10px;padding:12px;color:#203040;font:inherit;cursor:pointer}
+.patient-choices button:hover{border-color:#27658a;background:#eef5f9}
+.patient-choices button:disabled{opacity:.65;cursor:default}
+.patient-choices .good{border-color:#2d7d65;background:#e8f5ed}
+.patient-choices .bad{border-color:#b66b54;background:#fff1ec}
+
+
+.free-input-wrap{margin-top:14px;display:grid;gap:9px}
+.free-input-wrap textarea{width:100%;box-sizing:border-box;border:1px solid #cbd7df;border-radius:10px;padding:12px;font:inherit;resize:vertical;background:#fff;color:#203040}
+#freeChatLog p{padding:9px 11px;border-radius:9px;background:#f4f8fb;margin:8px 0}
+#freeChatLog p.doctor-line{background:#edf6ef}
+#freeChatFeedback{margin-top:12px}
+
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Medical English Made Easy</h1>
+<p>Интерактивный модуль · Chapter 2: Symptoms and Complaints</p>
+<p class="small" style="color:#dceaf3;margin-top:8px">Слова · произношение · диалог · проверка знаний</p>
+</div></header>
+<main class="wrap">
+<nav>
+<button class="active" data-tab="vocab">Словарь</button>
+<button data-tab="questions">Фразы врача</button>
+<button data-tab="dialogue">Диалог</button>
+<button data-tab="quiz">Тест</button>
+<button data-tab="course">Все главы</button>
+<button data-tab="speaking">Аудиопрактика</button>
+<button data-tab="progress">Мой прогресс</button>
+<button data-tab="patient">Виртуальный пациент</button>
+<button data-tab="freechat">Свободный диалог</button>
+</nav>
+
+<section id="vocab" class="tab show">
+<div class="card">
+<h2>2.1. Частые симптомы</h2>
+<p class="small">Нажмите «Прослушать», чтобы услышать английское произношение. Озвучивание работает через браузер.</p>
+<table><thead><tr><th>English</th><th>IPA</th><th>Примерное чтение</th><th>Перевод</th><th></th></tr></thead><tbody id="words"></tbody></table>
+</div>
+<div class="card">
+<h2>2.2. Как описать боль</h2>
+<table><thead><tr><th>English</th><th>IPA</th><th>Примерное чтение</th><th>Перевод</th><th></th></tr></thead><tbody id="pain"></tbody></table>
+</div>
+</section>
+
+<section id="questions" class="tab">
+<div class="card">
+<h2>2.3. Вопросы врача</h2>
+<div class="note">Тренируйте вопросы вслух. Сначала прочитайте английскую фразу, затем проверьте перевод.</div>
+<div id="phrases"></div>
+</div>
+</section>
+
+<section id="dialogue" class="tab">
+<div class="card">
+<h2>2.4. Диалог: жалобы пациента</h2>
+<div class="dialogue">
+<p><b>Doctor:</b> What seems to be the problem?<br><span class="translation">Что вас беспокоит?</span></p>
+<p><b>Patient:</b> I have a headache and feel weak.<br><span class="translation">У меня болит голова, и я чувствую слабость.</span></p>
+<p><b>Doctor:</b> When did it start?<br><span class="translation">Когда это началось?</span></p>
+<p><b>Patient:</b> It started this morning.<br><span class="translation">Это началось сегодня утром.</span></p>
+<p><b>Doctor:</b> Do you have a fever?<br><span class="translation">У вас повышенная температура?</span></p>
+<p><b>Doctor:</b> We will check your temperature.<br><span class="translation">Мы измерим вашу температуру.</span></p>
+</div>
+<button class="btn" onclick="toggleTranslations()">Скрыть / показать перевод</button>
+<button class="btn primary" onclick="speak('What seems to be the problem? I have a headache and feel weak. When did it start? It started this morning. Do you have a fever? We will check your temperature.')">Прослушать диалог</button>
+</div>
+</section>
+
+<section id="quiz" class="tab">
+<div class="card">
+<h2>Проверьте себя</h2>
+<p class="small">Выберите один ответ в каждом вопросе и нажмите «Проверить».</p>
+<form id="quizform">
+<div class="question"><b>1. Как переводится headache?</b>
+<label><input type="radio" name="q1" value="a"> Кашель</label><label><input type="radio" name="q1" value="b"> Головная боль</label><label><input type="radio" name="q1" value="c"> Слабость</label></div>
+<div class="question"><b>2. Как сказать «Где болит?»</b>
+<label><input type="radio" name="q2" value="a"> Where does it hurt?</label><label><input type="radio" name="q2" value="b"> When did it start?</label><label><input type="radio" name="q2" value="c"> Do you have a fever?</label></div>
+<div class="question"><b>3. Что означает severe pain?</b>
+<label><input type="radio" name="q3" value="a"> Слабая боль</label><label><input type="radio" name="q3" value="b"> Тупая боль</label><label><input type="radio" name="q3" value="c"> Сильная боль</label></div>
+<div class="question"><b>4. Как переводится nausea?</b>
+<label><input type="radio" name="q4" value="a"> Тошнота</label><label><input type="radio" name="q4" value="b"> Отёк</label><label><input type="radio" name="q4" value="c"> Сыпь</label></div>
+<div class="question"><b>5. Когда уместен вопрос “When did it start?”</b>
+<label><input type="radio" name="q5" value="a"> Чтобы спросить о начале симптома</label><label><input type="radio" name="q5" value="b"> Чтобы измерить температуру</label><label><input type="radio" name="q5" value="c"> Чтобы дать совет</label></div>
+<button type="button" class="btn primary" onclick="checkQuiz()">Проверить ответы</button>
+<button type="reset" class="btn" onclick="document.getElementById('result').style.display='none'">Сбросить</button>
+<div class="result" id="result"></div>
+</form>
+</div>
+</section>
+
+
+
+
+
+<section id="freechat" class="tab">
+ <div class="card">
+  <h2>Этап 4. Свободный диалог с пациентом</h2>
+  <p>Теперь студент сам формулирует вопросы и ответы на английском, а не выбирает готовые варианты. Тренажёр проверяет ключевые слова и соответствие реплики текущей задаче.</p>
+  <div class="row" style="margin:12px 0">
+   <span class="badge">Уровень: A1–A2</span><span class="badge">Сценарий: головная боль</span><span class="badge">Режим: свободный ввод</span>
+  </div>
+  <div class="note"><b>Задача:</b> выясните, когда началась головная боль, где болит и насколько сильная боль. Затем ответьте пациенту вежливо.</div>
+  <div id="freeChatLog" class="dialogue" aria-live="polite">
+   <p><b>Patient:</b> Hello, doctor. I have a headache and feel weak.<br><span class="translation">Здравствуйте, доктор. У меня болит голова, и я чувствую слабость.</span></p>
+  </div>
+  <div class="free-input-wrap">
+   <label for="freeChatInput"><b>Ваша реплика на английском:</b></label>
+   <textarea id="freeChatInput" rows="3" placeholder="Например: When did it start?"></textarea>
+   <div class="row">
+    <button class="btn primary" onclick="sendFreeChat()">Отправить</button>
+    <button class="btn" onclick="speakFreePatient()">▶ Прослушать пациента</button>
+    <button class="btn" onclick="resetFreeChat()">Начать заново</button>
+   </div>
+  </div>
+  <div id="freeChatFeedback" class="result" style="display:block">Напишите первый вопрос пациенту. Можно начать с: “When did it start?”</div>
+  <p class="small">Проверка выполняется локально по ключевым словам и шаблонам. Тренажёр пока не использует ИИ, не оценивает грамматику полностью и не заменяет преподавателя.</p>
+ </div>
+ <div class="card">
+  <h3>Прогресс диалога</h3>
+  <p id="freeChatProgress">Уточнено: 0 из 4 задач</p>
+  <div class="progress"><div id="freeChatBar" style="width:0%"></div></div>
+  <p id="freeChatSummary" class="small">Выполните четыре коммуникативные задачи, чтобы завершить сценарий.</p>
+ </div>
+</section>
+
+<section id="patient" class="tab">
+ <div class="card">
+  <h2>Этап 3. Виртуальный пациент</h2>
+  <p>Тренажёр клинического общения на английском языке. Выберите реплику врача, чтобы продолжить разговор. После каждого ответа появится перевод и короткая обратная связь.</p>
+  <div class="note"><b>Сценарий:</b> пациент обратился с головной болью и слабостью. Ваша задача — начать беседу и уточнить основные жалобы.</div>
+  <div class="row" style="margin:12px 0">
+   <span class="badge">Уровень: A1–A2</span>
+   <span class="badge">Роль: врач</span>
+   <span class="badge">Язык: English</span>
+  </div>
+  <div id="patientChat" class="dialogue" aria-live="polite">
+   <p><b>Patient:</b> Hello, doctor. I have a headache and feel weak.<br><span class="translation">Здравствуйте, доктор. У меня болит голова, и я чувствую слабость.</span></p>
+  </div>
+  <h3 id="patientPrompt">Выберите ответ врача:</h3>
+  <div id="patientChoices" class="patient-choices"></div>
+  <div id="patientFeedback" class="result" style="display:block;min-height:45px">Выберите подходящую фразу, чтобы продолжить диалог.</div>
+  <div class="row" style="margin-top:12px">
+   <button class="btn" onclick="restartPatient()">Начать заново</button>
+   <button class="btn primary" onclick="speakPatientLast()">▶ Прослушать последнюю реплику</button>
+  </div>
+  <p class="small">Это учебный сценарий с заранее подготовленными вариантами ответов, а не медицинская консультация и не генеративный ИИ. В реальной практике вопросы и действия определяются состоянием пациента и клиническими протоколами.</p>
+ </div>
+ <div class="card">
+  <h3>Результат тренировки</h3>
+  <p id="patientScore">Правильные ответы: 0 из 0</p>
+  <p id="patientSummary" class="small">Завершите диалог, чтобы увидеть результат.</p>
+ </div>
+</section>
+
+<section id="progress" class="tab">
+ <div class="card">
+  <h2>Мой учебный прогресс</h2>
+  <p>Данные сохраняются локально в этом браузере на устройстве. Они не синхронизируются между устройствами и могут исчезнуть при очистке данных браузера.</p>
+  <div class="progressbar"><div id="progressFill"></div></div>
+  <p id="progressSummary" class="note">Выполнено 0 из 26 глав.</p>
+  <div class="row"><button class="btn" onclick="renderProgress()">Обновить</button><button class="btn" onclick="resetProgress()">Сбросить прогресс</button></div>
+ </div>
+ <div class="card"><h3>История тестов</h3><div id="quizHistory">Пока нет результатов.</div></div>
+ <div class="card"><h3>Пройденные главы</h3><div id="completedChapters">Пока нет завершённых глав.</div></div>
+</section>
+
+<section id="speaking" class="tab">
+<div class="card">
+<h2>Аудиопрактика: слушайте и повторяйте</h2>
+<p>Выберите фразу, прослушайте английское произношение, затем произнесите её самостоятельно. Голос зависит от браузера и установленных на устройстве голосовых пакетов.</p>
+<label for="speakSelect"><b>Фраза для тренировки</b></label>
+<select id="speakSelect" style="width:100%;padding:12px;margin:8px 0;border-radius:10px">
+<option value="Hello.">Hello. — Здравствуйте.</option>
+<option value="Good morning.">Good morning. — Доброе утро.</option>
+<option value="How can I help you?">How can I help you? — Чем я могу вам помочь?</option>
+<option value="What seems to be the problem?">What seems to be the problem? — Что вас беспокоит?</option>
+<option value="Where does it hurt?">Where does it hurt? — Где болит?</option>
+<option value="When did it start?">When did it start? — Когда это началось?</option>
+<option value="Do you have any allergies?">Do you have any allergies? — У вас есть аллергия?</option>
+<option value="Take a deep breath.">Take a deep breath. — Сделайте глубокий вдох.</option>
+<option value="You should rest.">You should rest. — Вам следует отдохнуть.</option>
+<option value="Could you explain it again, please?">Could you explain it again, please? — Не могли бы вы объяснить ещё раз?</option>
+</select>
+<div class="row"><button class="btn primary" onclick="playSelected()">▶ Прослушать</button><button class="btn" id="recordBtn" onclick="toggleRecording()">● Записать свой голос</button></div>
+<p id="recordStatus" class="small">Запись доступна, если браузер разрешит доступ к микрофону. Аудио остаётся в текущей вкладке и не отправляется на сервер.</p>
+<audio id="myRecording" controls style="width:100%;display:none"></audio>
+</div>
+<div class="card">
+<h3>Проверьте себя самостоятельно</h3>
+<p>После прослушивания и записи отметьте, насколько уверенно получилось произнести фразу.</p>
+<div class="row">
+<button class="btn" onclick="rateSpeech('easy')">Получилось легко</button>
+<button class="btn" onclick="rateSpeech('repeat')">Нужно повторить</button>
+<button class="btn" onclick="rateSpeech('hard')">Пока трудно</button>
+</div>
+<p id="speechFeedback" class="note">Здесь появится ваша отметка. Это самооценка, а не автоматическая проверка произношения.</p>
+</div>
+<div class="card">
+<h3>Техника тренировки</h3>
+<ol>
+<li>Прослушайте фразу один раз, не повторяя.</li>
+<li>Прослушайте ещё раз и обратите внимание на ударение и ритм.</li>
+<li>Произнесите фразу вслух два-три раза.</li>
+<li>Запишите себя и сравните звучание с образцом.</li>
+<li>Если фраза даётся трудно, повторите её медленнее.</li>
+</ol>
+<p class="small">Важно: браузерное озвучивание воспроизводит фразу, а запись позволяет услышать себя. Прототип пока не распознаёт речь и не выставляет объективную оценку произношению.</p>
+</div>
+</section>
+
+<section id="course" class="tab">
+<div class="card">
+<h2>Полная программа цифрового курса</h2>
+<p>Структура собрана по содержанию учебника <i>Medical English Made Easy</i>. Выберите главу, чтобы увидеть её тему и учебную задачу. Для глав, где приведены примеры слов, транскрипция и перевод взяты из соответствующих разделов книги.</p>
+<div class="note">Курс состоит из базовой части, расширенной практики, дополнительных глав, ситуационных заданий и иллюстрированного словаря.</div>
+<div id="chapterList"></div>
+</div>
+<div class="card" id="chapterDetail"><h2>Выберите главу</h2><p>Содержание главы появится здесь.</p></div>
+</section>
+
+<div class="card note"><b>Учебная пометка.</b> Материал предназначен для изучения английского языка. Он не заменяет клинические рекомендации и медицинскую помощь. При внезапной сильной боли или затруднённом дыхании необходимо немедленно привлечь медицинскую помощь.</div>
+<footer>Учебный цифровой прототип · Medical English Made Easy · Rina Wells</footer>
+</main>
+<script>
+const vocabulary=[
+["pain","/peɪn/","пэйн","боль"],["headache","/ˈhedeɪk/","ХЭД-эйк","головная боль"],["stomachache","/ˈstʌməkeɪk/","СТА-мэ-кэйк","боль в животе"],["chest pain","/tʃest peɪn/","чест пэйн","боль в груди"],["fever","/ˈfiːvə(r)/","ФИ-вэ","лихорадка; повышенная температура тела"],["cough","/kɒf/","коф","кашель"],["sore throat","/sɔː θrəʊt/","соо θроут","боль в горле"],["nausea","/ˈnɔːziə/","НО-зи-э","тошнота"],["vomiting","/ˈvɒmɪtɪŋ/","ВО-ми-тинг","рвота"],["dizziness","/ˈdɪzinəs/","ДИ-зи-нэс","головокружение"],["weakness","/ˈwiːknəs/","УИК-нэс","слабость"],["rash","/ræʃ/","рэш","сыпь"],["swelling","/ˈswelɪŋ/","СУЭ-линг","отёк"],["shortness of breath","/ˈʃɔːtnəs əv breθ/","ШОТ-нэс эв БРЭθ","одышка"],["fatigue","/fəˈtiːɡ/","фэ-ТИГ","утомляемость"]];
+const pain=[["mild pain","/maɪld peɪn/","майлд пэйн","слабая боль"],["moderate pain","/ˈmɒdərət peɪn/","МО-дэ-рэт пэйн","умеренная боль"],["severe pain","/sɪˈvɪə peɪn/","си-ВИЭ пэйн","сильная боль"],["sharp pain","/ʃɑːp peɪn/","шарп пэйн","резкая боль"],["dull pain","/dʌl peɪn/","дал пэйн","тупая боль"],["constant pain","/ˈkɒnstənt peɪn/","КОН-стэнт пэйн","постоянная боль"],["intermittent pain","/ˌɪntəˈmɪtənt peɪn/","ин-тэ-МИ-тэнт пэйн","периодическая боль"],["burning pain","/ˈbɜːnɪŋ peɪn/","БЁР-нинг пэйн","жгучая боль"]];
+function renderRows(id,data){document.getElementById(id).innerHTML=data.map(x=>`<tr><td class="word">${x[0]}</td><td class="ipa">${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td><button class="audio" onclick="speak('${x[0].replace(/'/g,"\\'")}')">▶</button></td></tr>`).join("")}
+renderRows("words",vocabulary);renderRows("pain",pain);
+const phrases=[["What seems to be the problem?","Что вас беспокоит?"],["Where does it hurt?","Где болит?"],["When did it start?","Когда это началось?"],["How long have you had these symptoms?","Как давно у вас эти симптомы?"],["How severe is the pain?","Насколько сильная боль?"],["Does anything make it better or worse?","Что-нибудь облегчает или усиливает боль?"],["Have you had this before?","Такое уже случалось раньше?"]];
+document.getElementById("phrases").innerHTML=phrases.map(p=>`<div class="question row"><div style="flex:1"><b>${p[0]}</b><br><span class="translation">${p[1]}</span></div><button class="audio" onclick="speak('${p[0]}')">▶ Прослушать</button></div>`).join("");
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".tab").forEach(x=>x.classList.remove("show"));b.classList.add("active");document.getElementById(b.dataset.tab).classList.add("show")}));
+renderProgress();
+function speak(t){if(!("speechSynthesis" in window)){alert("Озвучивание не поддерживается этим браузером.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;speechSynthesis.speak(u)}
+function toggleTranslations(){document.querySelectorAll(".translation").forEach(x=>x.style.display=x.style.display==="none"?"":"none")}
+function checkQuiz(){let key={q1:"b",q2:"a",q3:"c",q4:"a",q5:"a"},score=0,answered=0;for(let q in key){let a=document.querySelector(`input[name=${q}]:checked`);if(a){answered++;if(a.value===key[q])score++}}let r=document.getElementById("result");r.style.display="block";r.textContent=`Результат: ${score} из 5. Отвечено: ${answered} из 5.`+(answered<5?" Ответьте на все вопросы, чтобы проверить себя полностью.":score===5?" Отлично!":" Повторите слова и фразы, затем попробуйте ещё раз.");if(answered===5){let state=getLearningState();state.tests.unshift({score,total:5,date:new Date().toLocaleString("ru-RU")});state.tests=state.tests.slice(0,20);saveLearningState(state);renderProgress();}}
+
+
+let mediaRecorder=null, audioChunks=[];
+function playSelected(){speak(document.getElementById("speakSelect").value)}
+async function toggleRecording(){
+ const btn=document.getElementById("recordBtn"), status=document.getElementById("recordStatus"), audio=document.getElementById("myRecording");
+ if(mediaRecorder && mediaRecorder.state==="recording"){mediaRecorder.stop();btn.textContent="● Записать свой голос";return}
+ if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){status.textContent="Запись не поддерживается этим браузером. Откройте файл в актуальном Chrome и разрешите доступ к микрофону.";return}
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  audioChunks=[];mediaRecorder=new MediaRecorder(stream);
+  mediaRecorder.ondataavailable=e=>{if(e.data.size)audioChunks.push(e.data)};
+  mediaRecorder.onstop=()=>{const blob=new Blob(audioChunks,{type:mediaRecorder.mimeType||"audio/webm"});audio.src=URL.createObjectURL(blob);audio.style.display="block";status.textContent="Запись готова. Прослушайте её и сравните с образцом.";stream.getTracks().forEach(t=>t.stop())};
+  mediaRecorder.start();btn.textContent="■ Остановить запись";status.textContent="Идёт запись. Произнесите выбранную фразу, затем нажмите «Остановить запись».";
+ }catch(e){status.textContent="Не удалось получить доступ к микрофону. Проверьте разрешения браузера и повторите попытку."}
+}
+function rateSpeech(v){const m={easy:"Отмечено: получилось легко. Переходите к следующей фразе.",repeat:"Отмечено: нужно повторить. Прослушайте образец ещё раз и потренируйтесь.",hard:"Отмечено: пока трудно. Разбейте фразу на короткие части и повторите медленно."};document.getElementById("speechFeedback").textContent=m[v]}
+
+
+const LEARNING_KEY="medicalEnglishMadeEasyProgress_v1";
+function getLearningState(){try{return JSON.parse(localStorage.getItem(LEARNING_KEY))||{completed:[],tests:[]}}catch(e){return {completed:[],tests:[]}}}
+function saveLearningState(s){try{localStorage.setItem(LEARNING_KEY,JSON.stringify(s))}catch(e){alert("Браузер не разрешил сохранить прогресс. Проверьте настройки хранения данных.")}}
+function completeChapter(n){let s=getLearningState();if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);saveLearningState(s);renderProgress();alert("Глава "+n+" отмечена как пройденная.")}
+function renderProgress(){let s=getLearningState(),count=s.completed.length;let fill=document.getElementById("progressFill");if(fill)fill.style.width=(count/26*100)+"%";let summary=document.getElementById("progressSummary");if(summary)summary.textContent=`Выполнено ${count} из 26 глав (${Math.round(count/26*100)}%).`;let done=document.getElementById("completedChapters");if(done)done.innerHTML=count?s.completed.map(n=>{let c=chapters.find(x=>x.n===n);return `<span class="badge">✓ ${n}. ${c?c.ru:"Глава "+n}</span>`}).join(" "):"Пока нет завершённых глав.";let hist=document.getElementById("quizHistory");if(hist)hist.innerHTML=s.tests.length?`<ol>${s.tests.map(t=>`<li>${t.date}: ${t.score} из ${t.total} ${t.score>=4?"✓ зачёт":"— повторите материал"}</li>`).join("")}</ol>`:"Пока нет результатов."}
+function resetProgress(){if(!confirm("Удалить сохранённые отметки о главах и результаты тестов?"))return;localStorage.removeItem(LEARNING_KEY);renderProgress()}
+
+const chapters = [
+{n:1,t:"Basic Medical Vocabulary",ru:"Основная медицинская лексика",group:"Основной курс",desc:"Люди, места, предметы и базовые слова, необходимые при знакомстве с пациентом и работе в больнице.",words:[["doctor","/ˈdɒktə(r)/","ДОК-тэ","врач"],["nurse","/nɜːs/","нёрс","медсестра / медбрат"],["patient","/ˈpeɪʃnt/","ПЭЙ-шэнт","пациент"]]},
+{n:2,t:"Symptoms and Complaints",ru:"Симптомы и жалобы",group:"Основной курс",desc:"Названия симптомов, описание боли и вопросы о жалобах пациента.",words:[["headache","/ˈhedeɪk/","ХЭД-эйк","головная боль"],["cough","/kɒf/","коф","кашель"],["nausea","/ˈnɔːziə/","НО-зи-э","тошнота"]]},
+{n:3,t:"Taking a Medical History",ru:"Сбор анамнеза",group:"Основной курс",desc:"Вопросы о начале, продолжительности и характере симптомов, прошлом здоровье пациента.",words:[["medical history","/ˈmedɪkl ˈhɪstri/","медикэл хистори","анамнез"],["allergy","/ˈælədʒi/","ЭЛ-эджи","аллергия"],["symptom","/ˈsɪmptəm/","СИМП-тэм","симптом"]]},
+{n:4,t:"Physical Examination",ru:"Физикальное обследование",group:"Основной курс",desc:"Объяснение действий во время осмотра и базовые фразы врача.",words:[["examination","/ɪɡˌzæmɪˈneɪʃn/","игзэми-НЭЙ-шн","обследование"],["breathe in","/briːð ɪn/","бриз ин","вдохните"],["lie down","/laɪ daʊn/","лай даун","лягте"]]},
+{n:5,t:"Medical Tests and Investigations",ru:"Анализы и исследования",group:"Основной курс",desc:"Названия лабораторных и диагностических исследований, объяснение подготовки к анализам.",words:[["blood test","/blʌd test/","блад тэст","анализ крови"],["urine test","/ˈjʊərɪn test/","йурин тэст","анализ мочи"],["X-ray","/ˈeks reɪ/","ЭКС-рэй","рентген"]]},
+{n:6,t:"Diagnosis and Treatment",ru:"Диагноз и лечение",group:"Основной курс",desc:"Язык для обсуждения диагноза, лечения и дальнейших действий.",words:[["diagnosis","/ˌdaɪəɡˈnəʊsɪs/","дайэг-НОУ-сис","диагноз"],["treatment","/ˈtriːtmənt/","ТРИИТ-мэнт","лечение"],["prescription","/prɪˈskrɪpʃn/","при-СКРИП-шн","рецепт"]]},
+{n:7,t:"Giving Advice and Instructions",ru:"Рекомендации и инструкции",group:"Основной курс",desc:"Как давать пациенту понятные рекомендации и объяснять порядок действий.",words:[["take this medicine","—","тэйк зис мэдисин","принимайте это лекарство"],["twice a day","—","твайс э дэй","два раза в день"],["follow the instructions","—","фолоу зи инструкшнз","следуйте инструкциям"]]},
+{n:8,t:"Emergency Situations",ru:"Неотложные ситуации",group:"Основной курс",desc:"Фразы для общения в экстренных ситуациях и описания срочных жалоб.",words:[["emergency","/ɪˈmɜːdʒənsi/","и-МЁ-ДЖЭН-си","неотложный случай"],["urgent","/ˈɜːdʒənt/","Ё-ДЖЭНТ","срочный"],["help","/help/","хэлп","помощь"]]},
+{n:9,t:"Doctor–Patient Dialogues",ru:"Диалоги врача и пациента",group:"Основной курс",desc:"Модели общения врача и пациента в типичных ситуациях.",words:[["How can I help you?","—","хау кэн ай хэлп ю","Чем я могу вам помочь?"],["What seems to be the problem?","—","уот симз ту би зэ проблем","Что вас беспокоит?"],["Thank you for coming.","—","сэнк ю фэ каминг","Спасибо, что пришли."]]},
+{n:10,t:"Revision and Final Practice",ru:"Повторение и итоговая практика",group:"Основной курс",desc:"Повторение лексики, фраз и диалогов основного курса, выполнение итоговых заданий.",words:[]},
+{n:11,t:"At the Hospital",ru:"В больнице и отделениях",group:"Дополнительные разделы и практика",desc:"Ориентирование в больнице, названия отделений и объяснение пациенту, куда идти.",words:[["hospital","/ˈhɒspɪtl/","хоспитэл","больница"],["ward","/wɔːd/","уорд","палата / отделение"],["outpatient department","/ˌaʊtpeɪʃnt dɪˈpɑːtmənt/","аутпэйшэнт дипартмэнт","амбулаторное отделение"],["reception desk","/rɪˈsepʃn desk/","рисэпшн дэск","регистратура"]]},
+{n:12,t:"Taking a Medical History",ru:"Подробный сбор анамнеза",group:"Дополнительные разделы и практика",desc:"Уточнение времени появления, длительности, частоты и выраженности симптомов.",words:[["onset","/ˈɒnset/","онсэт","начало симптома"],["duration","/djuˈreɪʃn/","дьюрэйшн","продолжительность"],["frequency","/ˈfriːkwənsi/","фриквэнси","частота"],["severity","/sɪˈverəti/","сивэрити","степень выраженности"]]},
+{n:13,t:"Symptoms and Complaints",ru:"Симптомы и жалобы",group:"Дополнительные разделы и практика",desc:"Дополнительная лексика для описания жалоб и состояния пациента.",words:[]},
+{n:14,t:"Vital Signs",ru:"Жизненные показатели",group:"Дополнительные разделы и практика",desc:"Названия основных жизненных показателей и фразы при их измерении.",words:[["temperature","/ˈtemprətʃə/","тэмпрэчэр","температура"],["pulse rate","/pʌls reɪt/","палс рэйт","частота пульса"],["blood pressure","/blʌd ˈpreʃə/","блад прэшэр","артериальное давление"],["respiratory rate","/rɪˈspɪrətri reɪt/","рэспирэтэри рэйт","частота дыхания"]]},
+{n:15,t:"Parts of the Body",ru:"Части тела",group:"Дополнительные разделы и практика",desc:"Английские названия частей тела и органов для общения во время осмотра.",words:[]},
+{n:16,t:"Medical Examinations",ru:"Медицинские обследования",group:"Дополнительные разделы и практика",desc:"Дополнительные выражения, связанные с осмотром и обследованием пациента.",words:[]},
+{n:17,t:"Diseases and Diagnoses",ru:"Заболевания и диагнозы",group:"Дополнительные разделы и практика",desc:"Лексика для обсуждения заболеваний и диагностических формулировок.",words:[]},
+{n:18,t:"Medicines and Prescriptions",ru:"Лекарства и назначения",group:"Дополнительные разделы и практика",desc:"Названия лекарств и выражения, используемые при объяснении назначений.",words:[]},
+{n:19,t:"Emergency Situations",ru:"Неотложные ситуации",group:"Дополнительные разделы и практика",desc:"Расширенная практика общения в неотложных ситуациях.",words:[]},
+{n:20,t:"Communication with Patients",ru:"Общение с пациентами",group:"Дополнительные разделы и практика",desc:"Эмпатия, согласие, уважительное общение и понятные объяснения.",words:[["concern","/kənˈsɜːn/","кэнсёрн","опасение / беспокойство"],["reassure","/ˌriːəˈʃɔː/","ри-э-ШО:","успокоить, заверить"],["consent","/kənˈsent/","кэнсент","согласие"],["confidentiality","/ˌkɒnfɪdenʃiˈæləti/","конфиденшиэлити","конфиденциальность"]]},
+{n:21,t:"Extra Doctor–Patient Dialogues",ru:"Дополнительные диалоги",group:"Дополнительная практика",desc:"Дополнительные диалоги, в том числе обсуждение анализа крови и повторного приёма.",words:[]},
+{n:22,t:"Extended Medical Vocabulary",ru:"Расширенный медицинский словарь",group:"Дополнительная практика",desc:"Расширение словаря симптомов и медицинских терминов.",words:[["swelling","—","СУОУ-линг","отёк"],["rash","—","рэш","сыпь"],["itching","—","ИЧ-инг","зуд"],["vomiting","—","ВО-ми-тинг","рвота"]]},
+{n:23,t:"Common Medical Abbreviations",ru:"Распространённые медицинские сокращения",group:"Дополнительная практика",desc:"Знакомство с распространёнными сокращениями, встречающимися в медицинской документации.",words:[]},
+{n:24,t:"English Pronunciation for Medical Terms",ru:"Правила английского произношения",group:"Дополнительная практика",desc:"Правила чтения и произношения английских звуков и медицинских слов.",words:[]},
+{n:25,t:"Practical Role-Play Cards",ru:"Практические ситуации для ролевых игр",group:"Дополнительная практика",desc:"Ситуационные карточки для тренировки общения в роли врача и пациента.",words:[]},
+{n:26,t:"Extra Exercises and Tests",ru:"Дополнительные упражнения и тесты",group:"Дополнительная практика",desc:"Дополнительные задания и тесты для самостоятельной проверки знаний.",words:[]}
+];
+const groups=[...new Set(chapters.map(c=>c.group))];
+document.getElementById("chapterList").innerHTML=groups.map(g=>`<h3>${g}</h3><div class="chaptergrid">${chapters.filter(c=>c.group===g).map(c=>`<button class="btn" style="margin:4px;text-align:left" onclick="showChapter(${c.n})">${c.n}. ${c.t}<br><span class="small">${c.ru}</span></button>`).join("")}</div>`).join("");
+function showChapter(n){const c=chapters.find(x=>x.n===n);let w=c.words.length?`<h3>Слова и выражения из раздела</h3><table><thead><tr><th>English</th><th>IPA</th><th>Чтение</th><th>Перевод</th><th></th></tr></thead><tbody>${c.words.map(x=>`<tr><td class="word">${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td><button class="audio" onclick="speak('${x[0].replace(/'/g,"\\'")}')">▶</button></td></tr>`).join("")}</tbody></table>`:"<p class='small'>В этой версии для главы пока показаны тема и учебная задача. Следующим шагом можно добавить полный набор слов, фраз и упражнений из соответствующих страниц учебника.</p>";document.getElementById("chapterDetail").innerHTML=`<h2>Глава ${c.n}. ${c.t}</h2><p><b>${c.ru}</b></p><p>${c.desc}</p>${w}<p class="small">Раздел учебника: ${c.group}.</p><button class="btn primary" onclick="completeChapter(${c.n})">Отметить главу пройденной</button>`;document.getElementById("chapterDetail").scrollIntoView({behavior:"smooth",block:"start"})}
+
+
+const patientScenario = [
+ {patient:"When did it start?", patientRu:"Когда это началось?", options:[
+  {en:"It started this morning.",ru:"Это началось сегодня утром.",good:true,why:"Верно. Вы уточнили время появления симптома."},
+  {en:"Take this medicine twice a day.",ru:"Принимайте это лекарство два раза в день.",good:false,why:"Сначала нужно собрать информацию о жалобе, а не сразу давать лечение."},
+  {en:"Goodbye. See you later.",ru:"До свидания. До встречи.",good:false,why:"Разговор только начался. Нужно продолжить сбор анамнеза."}
+ ]},
+ {patient:"Do you have a fever?", patientRu:"У вас повышенная температура?", options:[
+  {en:"No, I don't think so.",ru:"Нет, думаю, что нет.",good:true,why:"Хорошо. Вы ответили на вопрос о сопутствующем симптоме."},
+  {en:"My name is Alex.",ru:"Меня зовут Алекс.",good:false,why:"Ответ не относится к вопросу о температуре."},
+  {en:"Where is the hospital?",ru:"Где находится больница?",good:false,why:"Это вопрос пациента, а не ответ на вопрос врача."}
+ ]},
+ {patient:"Where does it hurt?", patientRu:"Где болит?", options:[
+  {en:"Mostly in my forehead.",ru:"В основном в области лба.",good:true,why:"Верно. Вы уточнили локализацию боли."},
+  {en:"I am twenty years old.",ru:"Мне двадцать лет.",good:false,why:"Возраст не отвечает на вопрос о локализации боли."},
+  {en:"Please open your mouth.",ru:"Пожалуйста, откройте рот.",good:false,why:"Это инструкция для осмотра, а вопрос пока был о месте боли."}
+ ]},
+ {patient:"How severe is the pain?", patientRu:"Насколько сильная боль?", options:[
+  {en:"It is moderate.",ru:"Боль умеренная.",good:true,why:"Верно. Вы уточнили интенсивность боли."},
+  {en:"I live near the university.",ru:"Я живу рядом с университетом.",good:false,why:"Ответ не описывает интенсивность боли."},
+  {en:"You should drink more water.",ru:"Вам следует пить больше воды.",good:false,why:"Это рекомендация, а не ответ на вопрос пациента."}
+ ]},
+ {patient:"Thank you, doctor.", patientRu:"Спасибо, доктор.", options:[
+  {en:"You're welcome. We will continue the examination.",ru:"Пожалуйста. Мы продолжим обследование.",good:true,why:"Подходящая вежливая фраза. Вы завершили учебный диалог."},
+  {en:"I don't understand you.",ru:"Я вас не понимаю.",good:false,why:"Эта фраза не подходит как ответ на благодарность."},
+  {en:"Where does it hurt?",ru:"Где болит?",good:false,why:"Вы повторяете уже заданный вопрос вместо ответа на благодарность."}
+ ]}
+];
+let patientStep=0, patientCorrect=0, patientLast="Hello, doctor. I have a headache and feel weak.";
+function renderPatient(){
+ const chat=document.getElementById("patientChat");
+ const choices=document.getElementById("patientChoices");
+ const prompt=document.getElementById("patientPrompt");
+ if(patientStep>=patientScenario.length){
+  prompt.textContent="Диалог завершён";
+  choices.innerHTML="";
+  document.getElementById("patientFeedback").textContent="Вы завершили сценарий.";
+  document.getElementById("patientScore").textContent=`Правильные ответы: ${patientCorrect} из ${patientScenario.length}`;
+  document.getElementById("patientSummary").textContent=patientCorrect>=4?"Хороший результат. Повторите диалог ещё раз, чтобы закрепить фразы.":"Повторите вопросы о начале, температуре, локализации и интенсивности боли.";
+  return;
+ }
+ const s=patientScenario[patientStep];
+ chat.innerHTML += `<p><b>Patient:</b> ${s.patient}<br><span class="translation">${s.patientRu}</span></p>`;
+ prompt.textContent="Выберите ответ врача:";
+ choices.innerHTML=s.options.map((o,i)=>`<button onclick="choosePatient(${i})">${o.en}<br><span class="translation">${o.ru}</span></button>`).join("");
+ document.getElementById("patientFeedback").textContent="Выберите подходящую фразу.";
+ document.getElementById("patientScore").textContent=`Правильные ответы: ${patientCorrect} из ${patientStep}`;
+}
+function choosePatient(i){
+ const s=patientScenario[patientStep],o=s.options[i];
+ const buttons=document.querySelectorAll("#patientChoices button");
+ buttons.forEach((b,j)=>{b.disabled=true;if(j===i)b.classList.add(o.good?"good":"bad")});
+ if(o.good)patientCorrect++;
+ patientLast=o.en;
+ document.getElementById("patientChat").innerHTML += `<p><b>Doctor:</b> ${o.en}<br><span class="translation">${o.ru}</span></p>`;
+ document.getElementById("patientFeedback").textContent=(o.good?"✓ ":"✗ ")+o.why;
+ document.getElementById("patientScore").textContent=`Правильные ответы: ${patientCorrect} из ${patientStep+1}`;
+ patientStep++;
+ const next=document.createElement("button");next.className="btn primary";next.style.marginTop="10px";next.textContent=patientStep===patientScenario.length?"Завершить диалог":"Следующий вопрос";next.onclick=renderPatient;
+ document.getElementById("patientChoices").appendChild(next);
+}
+function restartPatient(){
+ patientStep=0;patientCorrect=0;patientLast="Hello, doctor. I have a headache and feel weak.";
+ document.getElementById("patientChat").innerHTML='<p><b>Patient:</b> Hello, doctor. I have a headache and feel weak.<br><span class="translation">Здравствуйте, доктор. У меня болит голова, и я чувствую слабость.</span></p>';
+ document.getElementById("patientScore").textContent="Правильные ответы: 0 из 0";
+ document.getElementById("patientSummary").textContent="Завершите диалог, чтобы увидеть результат.";
+ renderPatient();
+}
+function speakPatientLast(){speak(patientLast)}
+
+restartPatient();
+
+const freeTasks=[
+ {key:"start",patient:"I started feeling unwell this morning.",ru:"Я почувствовал(а) себя плохо сегодня утром.",prompt:"Уточните, когда началась боль.",hint:"When did it start? / When did the headache start?",test:t=>/(when|what time).*(start|begin)|when did it start|when did.*begin/.test(t)},
+ {key:"place",patient:"The pain is mostly in my forehead.",ru:"Боль в основном в области лба.",prompt:"Уточните, где именно болит.",hint:"Where does it hurt? / Where is the pain?",test:t=>/(where|which part).*(hurt|pain)|where does it hurt|where is the pain/.test(t)},
+ {key:"severity",patient:"I would say it is moderate.",ru:"Я бы сказал(а), что боль умеренная.",prompt:"Уточните силу боли.",hint:"How severe is the pain? / Is the pain mild or severe?",test:t=>/(how severe|how strong|mild or severe|rate the pain|intensity of the pain)/.test(t)},
+ {key:"polite",patient:"Thank you for listening, doctor.",ru:"Спасибо, что выслушали меня, доктор.",prompt:"Ответьте пациенту вежливо.",hint:"You're welcome. / Of course. I'm here to help.",test:t=>/(you.?re welcome|of course|happy to help|here to help|no problem)/.test(t)}
+];
+let freeStep=0,freeDone=[],freeLastPatient="Hello, doctor. I have a headache and feel weak.";
+function addFreeLine(role,en,ru,cls=""){
+ const p=document.createElement("p");if(cls)p.className=cls;
+ p.innerHTML=`<b>${role}:</b> ${escapeFree(en)}<br><span class="translation">${escapeFree(ru)}</span>`;
+ document.getElementById("freeChatLog").appendChild(p);
+}
+function escapeFree(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function updateFreeProgress(){
+ const n=freeDone.length;
+ document.getElementById("freeChatProgress").textContent=`Уточнено: ${n} из 4 задач`;
+ document.getElementById("freeChatBar").style.width=(n*25)+"%";
+ document.getElementById("freeChatSummary").textContent=n===4?"Сценарий завершён. Вы самостоятельно сформулировали все четыре реплики.":`Осталось выполнить задач: ${4-n}.`;
+}
+function sendFreeChat(){
+ const input=document.getElementById("freeChatInput"),raw=input.value.trim();
+ if(!raw){document.getElementById("freeChatFeedback").textContent="Сначала напишите реплику на английском.";return;}
+ const t=raw.toLowerCase().replace(/[.,!?]/g,"");
+ addFreeLine("Doctor",raw,"Ваша реплика","doctor-line");input.value="";
+ if(freeStep>=freeTasks.length){document.getElementById("freeChatFeedback").textContent="Сценарий уже завершён. Нажмите «Начать заново», чтобы повторить.";return;}
+ const task=freeTasks[freeStep];
+ if(task.test(t)){
+  freeDone.push(task.key);
+  document.getElementById("freeChatFeedback").textContent="✓ Подходящая реплика. "+task.prompt+" Вы справились с этой задачей.";
+  addFreeLine("Patient",task.patient,task.ru);
+  freeLastPatient=task.patient;
+  freeStep++;
+  updateFreeProgress();
+  if(freeStep<freeTasks.length){
+   document.getElementById("freeChatFeedback").textContent+=" Следующая задача: "+freeTasks[freeStep].prompt;
+  }else{
+   document.getElementById("freeChatFeedback").textContent+=" Диалог завершён. Хорошая работа!";
+  }
+ }else{
+  document.getElementById("freeChatFeedback").textContent="Пока не удалось определить нужную функцию реплики. Попробуйте иначе. Подсказка: "+task.hint;
+ }
+}
+function resetFreeChat(){
+ freeStep=0;freeDone=[];freeLastPatient="Hello, doctor. I have a headache and feel weak.";
+ document.getElementById("freeChatLog").innerHTML='<p><b>Patient:</b> Hello, doctor. I have a headache and feel weak.<br><span class="translation">Здравствуйте, доктор. У меня болит голова, и я чувствую слабость.</span></p>';
+ document.getElementById("freeChatInput").value="";
+ document.getElementById("freeChatFeedback").textContent='Напишите первый вопрос пациенту. Можно начать с: “When did it start?”';
+ updateFreeProgress();
+}
+function speakFreePatient(){speak(freeLastPatient)}
+
+resetFreeChat();
+</script>
+</body></html>
