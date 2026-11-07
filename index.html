@@ -4,19 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#173b59">
-<title>Medical English Made Easy — интерактивный модуль</title>
+<meta name="description" content="Medical English AI — интерактивная учебная платформа для изучения медицинского английского и практики общения врача с пациентом.">
+<title>Medical English AI — Medical English Made Easy</title>
 <style>
 :root{--navy:#173b59;--blue:#27658a;--pale:#eef5f9;--ink:#203040;--muted:#617181;--line:#d9e3ea;--green:#e8f5ed}
-*{box-sizing:border-box}body{margin:0;background:#f4f7fa;color:var(--ink);font:16px/1.5 Arial,sans-serif}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{margin:0;background:#f4f7fa;color:var(--ink);font:16px/1.5 Arial,sans-serif}
 header{background:linear-gradient(130deg,#173b59,#27658a);color:white;padding:25px 18px 22px}
 .wrap{max-width:900px;margin:auto}h1{font-size:25px;line-height:1.2;margin:0 0 8px}header p{margin:0;color:#e2edf4}
-nav{display:flex;gap:8px;overflow:auto;padding:12px 0}
+nav{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:12px 0;max-width:100%;-webkit-overflow-scrolling:touch;scrollbar-width:thin}nav button{flex:0 0 auto;white-space:nowrap}
 nav button,.btn{border:0;border-radius:10px;padding:10px 14px;background:#e5edf3;color:var(--navy);font-weight:700;cursor:pointer}
 nav button.active,.btn.primary{background:var(--navy);color:white}
 main{padding:0 14px 30px}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:18px;margin:10px 0;box-shadow:0 3px 12px #173b590c}
 h2{font-size:21px;color:var(--navy);margin:0 0 10px}h3{font-size:17px;color:var(--blue);margin:18px 0 8px}
 .note{background:var(--pale);border-left:4px solid var(--blue);padding:12px;border-radius:8px}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--navy);background:#f4f8fb}
+table{display:block;width:100%;max-width:100%;overflow-x:auto;border-collapse:collapse;font-size:14px;-webkit-overflow-scrolling:touch}table thead,table tbody{min-width:620px}table tr{white-space:normal}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--navy);background:#f4f8fb}
 .word{font-weight:700;color:#173b59}.ipa{color:#50677a}.small{font-size:13px;color:var(--muted)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.audio{border:1px solid var(--line);background:white;border-radius:8px;padding:6px 9px;cursor:pointer}
 .dialogue p{padding:10px 12px;margin:7px 0;background:#f5f8fa;border-radius:9px}
@@ -25,7 +26,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
 input[type=radio]{margin-right:7px}.result{padding:12px;border-radius:9px;margin-top:12px;background:var(--green);display:none}
 .tab{display:none}.tab.show{display:block}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:12px}
-@media(max-width:600px){h1{font-size:22px}table{font-size:13px}th,td{padding:8px 5px}.card{padding:14px}}
+@media(max-width:600px){h1{font-size:22px}header{padding:22px 16px 18px}main{padding-left:10px;padding-right:10px}.wrap{min-width:0}table{font-size:13px}th,td{padding:8px 5px}.card{padding:14px;min-width:0}nav{margin-right:-10px;padding-right:10px}nav button{padding:10px 12px;font-size:14px}}
 
 .chaptergrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px}
 #speaking select{font:inherit;background:white;color:#222}
@@ -57,9 +58,9 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:12px}
 </head>
 <body>
 <header><div class="wrap">
-<h1>Medical English Made Easy</h1>
-<p>Интерактивный модуль · Chapter 2: Symptoms and Complaints</p>
-<p class="small" style="color:#dceaf3;margin-top:8px">Слова · произношение · диалог · проверка знаний</p>
+<h1>Medical English AI</h1>
+<p>Интерактивная платформа для изучения медицинского английского</p>
+<p class="small" style="color:#dceaf3;margin-top:8px">На основе курса Medical English Made Easy · Словарь · произношение · клинические диалоги · тестирование</p>
 </div></header>
 <main class="wrap">
 <nav>
